@@ -10,11 +10,11 @@ ssh-add ~/.ssh/id_xyz
 ```
 
 ### Setup CMSSW and 2DAlphabet environment:
-Assuming you've already created the `~/nobackup/CMSDAS2023/` directory, first create the CMSSW environment:
+Assuming you've already created the `~/nobackup/CMSDAS2024/` directory, first create the CMSSW environment:
 ```
 ssh -XY USERNAME@cmslpc-sl7.fnal.gov
 export SCRAM_ARCH=slc7_amd64_gcc700
-cd nobackup/CMSDAS2023/
+cd nobackup/CMSDAS2024/
 cmsrel CMSSW_10_6_14
 cd CMSSW_10_6_14/src
 cmsenv
@@ -22,9 +22,9 @@ cmsenv
 
 Now set up 2DAlphabet:
 ```
-cd ~/nobackup/CMSDAS2023/CMSSW_10_6_14/src/
+cd ~/nobackup/CMSDAS2024/CMSSW_10_6_14/src/
 git clone https://github.com/ammitra/2DAlphabet.git
-git clone https://github.com/cms-analysis/HiggsAnalysis-CombinedLimit.git HiggsAnalysis/CombinedLimit
+git clone --branch 102x https://github.com/cms-analysis/HiggsAnalysis-CombinedLimit.git HiggsAnalysis/CombinedLimit
 curl -s https://raw.githubusercontent.com/lcorcodilos/CombineHarvester/master/CombineTools/scripts/sparse-checkout-ssh.sh | bash
 scram b clean; scram b -j 4
 cmsenv
@@ -50,14 +50,14 @@ r = ROOT.RooParametricHist()
 
 ### Finally, clone this repo to the `src` directory as well:
 ```
-cd ~/nobackup/CMSDAS2023/CMSSW_10_6_14/src/
-git clone https://github.com/ammitra/BstarToTW_CMSDAS2023_BackgroundEstimation.git
+cd ~/nobackup/CMSDAS2024/CMSSW_10_6_14/src/
+git clone https://github.com/ozamram/BstarToTW_CMSDAS2024_BackgroundEstimation.git
 ```
 OR fork the code onto your own personal space and set the upstream:
 ```
-https://github.com/<USERNAME>/BstarToTW_CMSDAS2023_BackgroundEstimation.git
-cd BstarToTW_CMSDAS2023_BackgroundEstimation
-git remote add upstream https://github.com/ammitra/BstarToTW_CMSDAS2023_BackgroundEstimation.git
+https://github.com/<USERNAME>/BstarToTW_CMSDAS2024_BackgroundEstimation.git
+cd BstarToTW_CMSDAS2024_BackgroundEstimation
+git remote add upstream https://github.com/ozamram/BstarToTW_CMSDAS2024_BackgroundEstimation.git
 git remote -v
 ```
 
@@ -65,7 +65,7 @@ git remote -v
 Go back to the directory where you installed 2DAlphabet and where the virtual environment resides:
 ```
 ssh -XY USERNAME@cmslpc-sl7.fnal.gov
-cd ~/nobackup/CMSDAS2023/CMSSW_10_6_14/src/
+cd ~/nobackup/CMSDAS2024/CMSSW_10_6_14/src/
 cmsenv
 source twoD-env/bin/activate
 ```
