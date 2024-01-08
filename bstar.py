@@ -78,7 +78,7 @@ def make_workspace():
     '''
 
     # open the smooth QCD MC file and gather the pass/fail histograms
-    smooth_MC_file = ROOT.TFile.Open('/uscms_data/d3/lcorcodi/BStar13TeV/CMSSW_10_2_0/src/BStar13TeV/rootfiles/smooth_QCD_run2.root')
+    smooth_MC_file = ROOT.TFile.Open('/eos/user/c/cmsdas/2023/long-ex-b2g/rootfiles/smooth_QCD_run2.root')
     smooth_MC_fail = smooth_MC_file.Get('out_fail_4_5_default_run2__mt_mtw')
     smooth_MC_pass = smooth_MC_file.Get('out_pass_4_5_default_run2__mt_mtw')
     # create the pass fail ratio by dividing the pass histogram by the fail via ROOT
@@ -181,6 +181,44 @@ def plot_fit(signal):
     subset = twoD.ledger.select(_select_signal, 'signalLH{}'.format(signal))
     twoD.StdPlots('tW-{}_area'.format(signal), subset)
 
+def plot_GoF(signal, tf='', condor=False):
+    '''
+    Plot the Goodness of Fit as the measured saturated test statistic in data 
+    compared against the distribution obtained from the toys. 
+    '''
+    plot.plot_gof('tWfits{}'.format('_'+tf if tf != '' else ''), 'tW-{}_area'.format(signal), condor=condor)
+
+def GoF(signal, tf='', nToys=500, condor=False):
+    '''
+    Calculates the value of the saturated test statistic in data and compares to the 
+    distribution obtained from 500 toys (by default).
+    '''
+    # Load an existing workspace for a given TF parameterization (e.g., 'tWfits_1x1')
+    fitDir = 'tWfits{}'.format('_'+tf if tf != '' else '')
+    twoD = TwoDAlphabet(fitDir, '{}/runConfig.json'.format(fitDir), loadPrevious=True)
+    # Creates a Combine card if not already existing (it should exist if you've already fitted this workspace)
+    if not os.path.exists(twoD.tag+'/'+'tW-{}_area/card.txt'.format(signal)):
+        print('{}/tW-{}_area/card.txt does not exist, making card'.format(twoD.tag,signal))
+        subset = twoD.ledger.select(_select_signal, 'signalLH{}'.format(signal), tf)
+        twoD.MakeCard(subset, 'tW-{}_area'.format(signal))
+
+    # Now run Combine's Goodness of Fit method, either on Combine or locally. 
+    if condor == False:
+        twoD.GoodnessOfFit(
+            'tW-{}_area'.format(signal), ntoys=nToys, freezeSignal=0,
+            condor=False
+        )
+	# Once finished, we can plot the results immediately from the output rootfile.
+	plot_GoF(signal, tf, condor)
+    else:
+	# 500 (default) toys, split across 50 condor jobs
+        twoD.GoodnessOfFit(
+            'tW-{}_area'.format(signal), ntoys=nToys, freezeSignal=0,
+            condor=True, njobs=50
+        )
+	# If submitting GoF jobs on condor, you must first wait for them to finish before plotting. 
+	print('Jobs successfully submitted - you can run plot_GoF after the jobs have finished running to plot results')
+
 def perform_limit(signal):
     '''
     Perform a blinded limit. To be blinded, the Combine algorithm (via option `--run blind`)
@@ -217,9 +255,24 @@ def perform_limit(signal):
         )
 
 if __name__ == "__main__":
-    make_workspace()
+    # Generate the 2DAlphabet workspace - this must be run once,
+    # but need not be re-run after initial workspace creation 
+    # unless you have changed something in the JSON config file.
+    #make_workspace()
 
+    # Signal masses can be appended to this list
     for sig in ['2400']:
-        ML_fit(sig)
-        plot_fit(sig)
-        perform_limit(sig)
+        ML_fit(sig)		# Perform the maximum likelihood fit for a given signal mass
+        plot_fit(sig)		# Plot the postfit results, includinng nuisance pulls and 1D projections
+        perform_limit(sig)	# Calculate the limit
+
+	# Calculate the goodness of fit for a given fit.
+	# Params:
+	#	sig = signal mass
+	#	tf  = transfer function specifying fit directory. 
+	#	   tf='0x0' -> 'tWfits_0x0'
+	#	   tf=''    -> 'tWfits'
+	#	nToys = number of toys to generate. More toys gives better test statistic distribution,
+	#	        but will take longer if not using Condor.
+	#	condor = whether or not to ship jobs off to Condor. Kinda doesn't work well on LXPLUS
+	GoF(sig, tf='', nToys=10, condor=False)	
