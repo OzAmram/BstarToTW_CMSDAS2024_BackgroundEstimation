@@ -62,7 +62,7 @@ git remote add upstream https://github.com/ozamram/BstarToTW_CMSDAS2024_Backgrou
 git remote -v
 ```
 
-## What to do after reconnecting to LXPLUS:
+## What to do after reconnecting to LPC:
 Go back to the directory where you installed 2DAlphabet and where the virtual environment resides:
 ```
 ssh -XY USERNAME@cmslpc-sl7.fnal.gov
