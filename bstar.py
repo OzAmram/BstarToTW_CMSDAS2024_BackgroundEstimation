@@ -258,7 +258,7 @@ if __name__ == "__main__":
     # Generate the 2DAlphabet workspace - this must be run once,
     # but need not be re-run after initial workspace creation 
     # unless you have changed something in the JSON config file.
-    #make_workspace()
+    make_workspace()
 
     # Signal masses can be appended to this list
     for sig in ['2400']:
