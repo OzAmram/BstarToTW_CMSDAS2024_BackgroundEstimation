@@ -1,5 +1,5 @@
-# BstarToTW_CMSDAS2023_BackgroundEstimation
-Background estimation for the 2023 CMSDAS $b^\ast \to tW$ exercise, using the updated version of 2DAlphabet
+# $B^\ast \to tW$ Background Estimate Exercise - CMSDAS @FNAL LPC 2025
+Background estimation for the 2025 CMSDAS $b^\ast \to tW$ exercise, using the updated version of 2DAlphabet and the latest version of Combine (v10.0.1).
 
 ## Getting started (in bash shell)
 
@@ -8,51 +8,45 @@ First, ensure that you have [SSH keys tied to your github account](https://docs.
 eval "$(ssh-agent -s)"
 ssh-add ~/.ssh/id_xyz
 ```
-This step is necessary for cloning some of the Combine tools used in the 2DAlphabet installation.
+This step is necessary for cloning some of the tools used in the Combine and 2DAlphabet installation.
 
 ### Setup CMSSW and 2DAlphabet environment:
-Assuming you've already created the `~/public/CMSDAS2023/` directory, first create the CMSSW environment:
+Assuming you've already created the `~/nobackup/CMSDAS2025/` directory, first create the CMSSW environment. Ensure that you are connecting to an LPC node with AlmaLinux 9, e.g. `cmslpc-el9.fnal.gov`:
 ```
-ssh -XY USERNAME@lxplus.cern.ch
-export SCRAM_ARCH=slc7_amd64_gcc700
-cd public/CMSDAS2023/
-cmsrel CMSSW_10_6_14
-cd CMSSW_10_6_14/src
+ssh -Y USERNAME@cmslpc-el9.fnal.gov
+cd ~/nobackup/CMSDAS2025/
+cmsrel CMSSW_14_1_0_pre4
+cd CMSSW_14_1_0_pre4/src
 cmsenv
 ```
 
 Now set up 2DAlphabet:
 ```
-cd ~/public/CMSDAS2023/CMSSW_10_6_14/src/
-git clone https://github.com/ammitra/2DAlphabet.git
-git clone --branch 102x https://github.com/cms-analysis/HiggsAnalysis-CombinedLimit.git HiggsAnalysis/CombinedLimit
-curl -s https://raw.githubusercontent.com/lcorcodilos/CombineHarvester/master/CombineTools/scripts/sparse-checkout-ssh.sh | bash
-scram b clean; scram b -j 4
-cmsenv
-```
-
-Now, create a virtual environment in which to install 2DAlphabet:
-```
-python -m virtualenv twoD-env
+git clone https://github.com/cms-analysis/HiggsAnalysis-CombinedLimit.git HiggsAnalysis/CombinedLimit
+cd HiggsAnalysis/CombinedLimit
+git fetch origin
+git checkout v10.0.1
+cd ../../
+git clone --branch CMSWW_14_1_0_pre4 git@github.com:JHU-Tools/CombineHarvester.git
+scramv1 b clean
+scramv1 b -j 16
+git clone --branch el9_matplotlib_plotting git@github.com:JHU-Tools/2DAlphabet.git
+python3 -m virtualenv twoD-env
 source twoD-env/bin/activate
-cd 2DAlphabet
+cd 2DAlphabet/
 python setup.py develop
 ```
 
-Then, check that the 2DAlphabet installation worked by opening a python shell:
+Then, check that the 2DAlphabet installation worked by typing the following in your bash shell:
 ```
-python
+python -c "import ROOT; r=ROOT.RooParametricHist()"
 ```
-then, inside the python shell:
-```
-import ROOT
-r = ROOT.RooParametricHist()
-```
+If the installation succeeded, you should see no output from the above command.
 
 ### Finally, clone this repo to the `src` directory as well:
 ```
-cd ~/public/CMSDAS2023/CMSSW_10_6_14/src/
-git clone https://github.com/ammitra/BstarToTW_CMSDAS2023_BackgroundEstimation.git
+cd ~/nobackup/CMSDAS2025/CMSSW_14_1_0_pre4/src/
+git clone --branch fnal-2025 https://github.com/ammitra/BstarToTW_CMSDAS2023_BackgroundEstimation.git
 ```
 OR fork the code onto your own personal space and set the upstream:
 ```
@@ -62,11 +56,11 @@ git remote add upstream https://github.com/ammitra/BstarToTW_CMSDAS2023_Backgrou
 git remote -v
 ```
 
-## What to do after reconnecting to LXPLUS:
+## Every time you reconnect to the LPC:
 Go back to the directory where you installed 2DAlphabet and where the virtual environment resides:
 ```
-ssh -XY USERNAME@lxplus.cern.ch
-cd ~/public/CMSDAS2023/CMSSW_10_6_14/src/
+ssh -XY USERNAME@cmslpc-el9.fnal.gov
+cd ~/nobackup/CMSDAS2025/CMSSW_14_1_0_pre4/src/
 cmsenv
 source twoD-env/bin/activate
 ```
