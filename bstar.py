@@ -78,7 +78,7 @@ def make_workspace():
     '''
 
     # open the smooth QCD MC file and gather the pass/fail histograms
-    smooth_MC_file = ROOT.TFile.Open('/eos/user/c/cmsdas/2023/long-ex-b2g/rootfiles/smooth_QCD_run2.root')
+    smooth_MC_file = ROOT.TFile.Open('/uscms_data/d3/lcorcodi/BStar13TeV/CMSSW_10_2_0/src/BStar13TeV/rootfiles/smooth_QCD_run2.root')
     smooth_MC_fail = smooth_MC_file.Get('out_fail_4_5_default_run2__mt_mtw')
     smooth_MC_pass = smooth_MC_file.Get('out_pass_4_5_default_run2__mt_mtw')
     # create the pass fail ratio by dividing the pass histogram by the fail via ROOT
@@ -178,8 +178,16 @@ def plot_fit(signal):
     Plots the fits from ML_fit() using 2DAlphabet
     '''
     twoD = TwoDAlphabet('tWfits', 'bstar.json', loadPrevious=True)
+    # Add custom labels to the pass and fail regions in the plots .
+    # The keys must be the regions used in the JSON, and the values are the title to be added.
+    # Multiple-line titles can be specified by separating the titles with a semicolon ";".
+    # LaTeX formatting is allowed, but then you must pass an r-string, e.g. r"Fail region (Tagger $\leq$ WP)"
+    subtitles = {
+        "Fail": r"Signal region;Fail",
+        "Pass": r"Signal region;Pass"
+    }
     subset = twoD.ledger.select(_select_signal, 'signalLH{}'.format(signal))
-    twoD.StdPlots('tW-{}_area'.format(signal), subset)
+    twoD.StdPlots('tW-{}_area'.format(signal), subset, subtitles=subtitles)
 
 def plot_GoF(signal, tf='', condor=False):
     '''
@@ -208,16 +216,16 @@ def GoF(signal, tf='', nToys=500, condor=False):
             'tW-{}_area'.format(signal), ntoys=nToys, freezeSignal=0,
             condor=False
         )
-	# Once finished, we can plot the results immediately from the output rootfile.
-	plot_GoF(signal, tf, condor)
+        # Once finished, we can plot the results immediately from the output rootfile.
+        plot_GoF(signal, tf, condor)
     else:
-	# 500 (default) toys, split across 50 condor jobs
+    # 500 (default) toys, split across 50 condor jobs
         twoD.GoodnessOfFit(
             'tW-{}_area'.format(signal), ntoys=nToys, freezeSignal=0,
             condor=True, njobs=50
         )
-	# If submitting GoF jobs on condor, you must first wait for them to finish before plotting. 
-	print('Jobs successfully submitted - you can run plot_GoF after the jobs have finished running to plot results')
+    # If submitting GoF jobs on condor, you must first wait for them to finish before plotting. 
+    print('Jobs successfully submitted - you can run plot_GoF after the jobs have finished running to plot results')
 
 def perform_limit(signal):
     '''
@@ -262,10 +270,11 @@ if __name__ == "__main__":
 
     # Signal masses can be appended to this list
     for sig in ['2400']:
-        ML_fit(sig)		# Perform the maximum likelihood fit for a given signal mass
-        plot_fit(sig)		# Plot the postfit results, includinng nuisance pulls and 1D projections
+        #ML_fit(sig)		# Perform the maximum likelihood fit for a given signal mass
+        #plot_fit(sig)		# Plot the postfit results, includinng nuisance pulls and 1D projections
         perform_limit(sig)	# Calculate the limit
 
+    '''
 	# Calculate the goodness of fit for a given fit.
 	# Params:
 	#	sig = signal mass
@@ -276,3 +285,4 @@ if __name__ == "__main__":
 	#	        but will take longer if not using Condor.
 	#	condor = whether or not to ship jobs off to Condor. Kinda doesn't work well on LXPLUS
 	GoF(sig, tf='', nToys=10, condor=False)	
+    '''

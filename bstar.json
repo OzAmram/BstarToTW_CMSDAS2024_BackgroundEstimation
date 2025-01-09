@@ -9,7 +9,7 @@
 	"HIST_UP": "MtwvMt$region$systup",
 	"HIST_DOWN": "MtwvMt$region$systdown",
 	"pathLPC": "/uscms_data/d3/lcorcodi/BStar13TeV/CMSSW_10_2_0/src/BStar13TeV/rootfiles",
-	"path": "/eos/user/c/cmsdas/2023/long-ex-b2g/rootfiles",
+	"pathLXPLUS": "/eos/user/c/cmsdas/2023/long-ex-b2g/rootfiles",
 	"SIGNAME": ["signalLH2400"]
     },
     "REGIONS": {
@@ -26,124 +26,124 @@
 	"data_obs": {
 	    "SYSTEMATICS": [],
 	    "SCALE": 1.0,
-	    "COLOR": 1,
+	    "COLOR": "black",
 	    "TYPE": "DATA",
 	    "TITLE": "Data",
 	    "HELP": "since the data ROOT file is called TWpreselectionRun2_data_tau32medium_default.root, we need an alias to allow this to get picked up",
 	    "ALIAS": "Run2_data",
-	    "LOC": "path/FILE:HIST"
+	    "LOC": "pathLPC/FILE:HIST"
 	},
 	"16_SIGNAME": {
 	    "SYSTEMATICS":["lumi"],
 	    "SCALE": 1.0, 
-	    "COLOR": 1, 
+	    "COLOR": "black", 
 	    "TYPE": "SIGNAL",
 	    "TITLE": "b*_{LH} (2.4 TeV)",
-	    "LOC": "path/FILE:HIST"
+	    "LOC": "pathLPC/FILE:HIST"
 	},
     "17_SIGNAME": {
 	    "SYSTEMATICS":["lumi"],
 	    "SCALE": 1.0, 
-	    "COLOR": 1, 
+	    "COLOR": "black", 
 	    "TYPE": "SIGNAL",
 	    "TITLE": "b*_{LH} (2.4 TeV)",
-	    "LOC": "path/FILE:HIST"
+	    "LOC": "pathLPC/FILE:HIST"
 	},
     "18_SIGNAME": {
 	    "SYSTEMATICS":["lumi"],
 	    "SCALE": 1.0, 
-	    "COLOR": 1, 
+	    "COLOR": "black", 
 	    "TYPE": "SIGNAL",
 	    "TITLE": "b*_{LH} (2.4 TeV)",
-	    "LOC": "path/FILE:HIST"
+	    "LOC": "pathLPC/FILE:HIST"
 	},
 	"16_ttbar": {
 	    "SYSTEMATICS": ["lumi","ttbar_xsec"],
 	    "SCALE": 1.0,
-	    "COLOR": 2,
+	    "COLOR": "red",
 	    "TYPE": "BKG",
 	    "TITLE": "t#bar{t}",
-	    "LOC": "path/FILE:HIST"
+	    "LOC": "pathLPC/FILE:HIST"
 	},
         "17_ttbar": {
             "SYSTEMATICS": ["lumi","ttbar_xsec"],
             "SCALE": 1.0,
-            "COLOR": 2,
+            "COLOR": "red",
             "TYPE": "BKG",
             "TITLE": "t#bar{t}",
-            "LOC": "path/FILE:HIST"
+            "LOC": "pathLPC/FILE:HIST"
         },
         "18_ttbar": {
             "SYSTEMATICS": ["lumi","ttbar_xsec"],
             "SCALE": 1.0,
-            "COLOR": 2,
+            "COLOR": "red",
             "TYPE": "BKG",
             "TITLE": "t#bar{t}",
-            "LOC": "path/FILE:HIST"
+            "LOC": "pathLPC/FILE:HIST"
         },
         "17_ttbar-semilep": {
             "SYSTEMATICS": ["lumi","ttbar_xsec"],
             "SCALE": 1.0,
-            "COLOR": 2,
+            "COLOR": "red",
             "TYPE": "BKG",
             "TITLE": "t#bar{t}",
-            "LOC": "path/FILE:HIST"
+            "LOC": "pathLPC/FILE:HIST"
         },
         "18_ttbar-semilep": {
             "SYSTEMATICS": ["lumi","ttbar_xsec"],
             "SCALE": 1.0,
-            "COLOR": 2,
+            "COLOR": "red",
             "TYPE": "BKG",
             "TITLE": "t#bar{t}",
-            "LOC": "path/FILE:HIST"
+            "LOC": "pathLPC/FILE:HIST"
         },
 	"16_singletop_tW": {
 	    "SYSTEMATICS": ["lumi","st_tW_xsec"],
 	    "SCALE": 1.0,
-	    "COLOR": 861,
+	    "COLOR": "orange",
 	    "TYPE": "BKG",
 	    "TITLE": "Single top",
-	    "LOC": "path/FILE:HIST"
+	    "LOC": "pathLPC/FILE:HIST"
 	},
         "16_singletop_tWB": {
             "SYSTEMATICS": ["lumi","st_tWB_xsec"],
             "SCALE": 1.0,
-            "COLOR": 861,
+            "COLOR": "orange",
             "TYPE": "BKG",
             "TITLE": "Single top",
-            "LOC": "path/FILE:HIST"
+            "LOC": "pathLPC/FILE:HIST"
         },
         "17_singletop_tW": {
             "SYSTEMATICS": ["lumi","st_tW_xsec"],
             "SCALE": 1.0,
-            "COLOR": 861,
+            "COLOR": "orange",
             "TYPE": "BKG",
             "TITLE": "Single top",
-            "LOC": "path/FILE:HIST"
+            "LOC": "pathLPC/FILE:HIST"
         },
         "17_singletop_tWB": {
             "SYSTEMATICS": ["lumi","st_tWB_xsec"],
             "SCALE": 1.0,
-            "COLOR": 861,
+            "COLOR": "orange",
             "TYPE": "BKG",
             "TITLE": "Single top",
-            "LOC": "path/FILE:HIST"
+            "LOC": "pathLPC/FILE:HIST"
         },
         "18_singletop_tW": {
             "SYSTEMATICS": ["lumi","st_tW_xsec"],
             "SCALE": 1.0,
-            "COLOR": 861,
+            "COLOR": "orange",
             "TYPE": "BKG",
             "TITLE": "Single top",
-            "LOC": "path/FILE:HIST"
+            "LOC": "pathLPC/FILE:HIST"
         },
         "18_singletop_tWB": {
             "SYSTEMATICS": ["lumi","st_tWB_xsec"],
             "SCALE": 1.0,
-            "COLOR": 861,
+            "COLOR": "orange",
             "TYPE": "BKG",
             "TITLE": "Single top",
-            "LOC": "path/FILE:HIST"
+            "LOC": "pathLPC/FILE:HIST"
         }
     },
     "SYSTEMATICS": {
@@ -166,16 +166,16 @@
         "Tpt-alpha": {
 	    "ALIAS": "TptAlpha",
             "CODE": 2,
-	    "UP": "path/FILE:HIST_UP",
-	    "DOWN": "path/FILE:HIST_DOWN",
+	    "UP": "pathLPC/FILE:HIST_UP",
+	    "DOWN": "pathLPC/FILE:HIST_DOWN",
             "SCALE": 1.0,
 	    "SIGMA": 1.0
         },
         "Tpt-beta": {
 	    "ALIAS": "TptBeta",
             "CODE": 2,
-            "UP": "path/FILE:HIST_UP",
-            "DOWN": "path/FILE:HIST_DOWN",
+            "UP": "pathLPC/FILE:HIST_UP",
+            "DOWN": "pathLPC/FILE:HIST_DOWN",
             "SCALE": 1.0,
 	    "SIGMA": 1.0
         }
@@ -184,14 +184,14 @@
 	"default": {
 	    "X": {
 		"NAME": "jetmass",
-		"TITLE": "m_{t} [GeV}",
+		"TITLE": "m_{t}",
 		"BINS": [65,85,105,125,145,165,185,205,225,245,265,285],
 		"SIGSTART": 105,
 		"SIGEND": 225
 	    },
 	    "Y": {
 		"NAME": "resmass",
-		"TITLE": "m_{tW} [GeV]",
+		"TITLE": "m_{tW}",
 		"BINS":[1200,1300,1400,1500,1600,1700,1800,1900,2000,2100,2200,2300,2400,2500,2600,2800,3000,3300,3600,4000]
 	    }
 	}
