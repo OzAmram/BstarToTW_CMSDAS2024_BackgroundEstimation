@@ -7,6 +7,9 @@ import ROOT
 import os
 import numpy as np
 
+# Global variable workspace name
+ws_name = 'tWfits_test'
+
 # for b*, the P/F regions are named MtwvMtPass and MtwvMtFail
 # so, just need to find and replace Pass/Fail depending on which region we want
 def _get_other_region_names(pass_reg_name):
@@ -63,6 +66,7 @@ def make_workspace(fr):
     # the original files! (Note though that you'd have to change the config to point to organized_hists.root).
     twoD = TwoDAlphabet('tWfits', 'bstar.json', loadPrevious=False, findreplace=fr)
 
+
     # Create the data - BKGs histograms
     qcd_hists = twoD.InitQCDHists()
 
@@ -78,7 +82,7 @@ def make_workspace(fr):
     '''
 
     # open the smooth QCD MC file and gather the pass/fail histograms
-    smooth_MC_file = ROOT.TFile.Open('/uscms_data/d3/lcorcodi/BStar13TeV/CMSSW_10_2_0/src/BStar13TeV/rootfiles/smooth_QCD_run2.root')
+    smooth_MC_file = ROOT.TFile.Open('root://cmseos.fnal.gov//store/user/cmsdas/2025/long_exercises/long-ex-bstar/smooth_QCD_run2.root')
     smooth_MC_fail = smooth_MC_file.Get('out_fail_4_5_default_run2__mt_mtw')
     smooth_MC_pass = smooth_MC_file.Get('out_pass_4_5_default_run2__mt_mtw')
     # create the pass fail ratio by dividing the pass histogram by the fail via ROOT
@@ -114,10 +118,10 @@ def make_workspace(fr):
                     binning_f, constant=True
                 )
 
-        # Next we'll book a 2x1 transfer function to transfer from Fail -> Pass
+        # Next we'll book a constant transfer function to transfer from Fail -> Pass
         qcd_rratio = ParametricFunction(
                         fail_name.replace('Fail','rratio'),
-                        binning_f, '(@0+@1*x+@2*x**2)*(1+@3*y)',
+                        binning_f, '(@0)',
                         constraints= {0:{"MIN":-10, "MAX":10}}
                    )
 
@@ -148,8 +152,8 @@ def ML_fit(signal):
     I've redundantly prepended the "subtag" argument with "_area".
     '''
 
-    # the default workspace directory, created in make_workspace(), is called tWfits/
-    twoD = TwoDAlphabet('tWfits', 'bstar.json', loadPrevious=True)
+    # the default workspace directory, created in make_workspace()/
+    twoD = TwoDAlphabet(ws_name, 'bstar.json', loadPrevious=True)
 
     # Create a subset of the primary ledger using the select() method.
     # The select() method takes as a function as its first argument
@@ -177,7 +181,7 @@ def plot_fit(signal):
     '''
     Plots the fits from ML_fit() using 2DAlphabet
     '''
-    twoD = TwoDAlphabet('tWfits', 'bstar.json', loadPrevious=True)
+    twoD = TwoDAlphabet(ws_name, 'bstar.json', loadPrevious=True)
     # Add custom labels to the pass and fail regions in the plots .
     # The keys must be the regions used in the JSON, and the values are the title to be added.
     # Multiple-line titles can be specified by separating the titles with a semicolon ";".
@@ -194,7 +198,7 @@ def plot_GoF(signal, tf='', condor=False):
     Plot the Goodness of Fit as the measured saturated test statistic in data 
     compared against the distribution obtained from the toys. 
     '''
-    plot.plot_gof('tWfits{}'.format('_'+tf if tf != '' else ''), 'tW-{}_area'.format(signal), condor=condor)
+    plot.plot_gof('{}{}'.format(ws_name, '_'+tf if tf != '' else ''), 'tW-{}_area'.format(signal), condor=condor)
 
 def GoF(signal, tf='', nToys=500, condor=False):
     '''
@@ -202,7 +206,7 @@ def GoF(signal, tf='', nToys=500, condor=False):
     distribution obtained from 500 toys (by default).
     '''
     # Load an existing workspace for a given TF parameterization (e.g., 'tWfits_1x1')
-    fitDir = 'tWfits{}'.format('_'+tf if tf != '' else '')
+    fitDir = '{}{}'.format(ws_name, '_'+tf if tf != '' else '')
     twoD = TwoDAlphabet(fitDir, '{}/runConfig.json'.format(fitDir), loadPrevious=True)
     # Creates a Combine card if not already existing (it should exist if you've already fitted this workspace)
     if not os.path.exists(twoD.tag+'/'+'tW-{}_area/card.txt'.format(signal)):
@@ -242,7 +246,7 @@ def perform_limit(signal):
     something reasonable to create the Asimov toy.
     '''
     # Returns a dictionary of the TF parameters with the names as keys and the post-fit values as dict values.
-    twoD = TwoDAlphabet('tWfits', 'bstar.json', loadPrevious=True)
+    twoD = TwoDAlphabet(ws_name, 'bstar.json', loadPrevious=True)
 
     # GetParamsOnMatch() opens up the workspace's fitDiagnosticsTest.root and selects the rratio for the background
     params_to_set = twoD.GetParamsOnMatch('rratio*', 'tW-{}_area'.format(signal), 'b')
@@ -264,7 +268,7 @@ def perform_limit(signal):
         # NOTE: we are running without blinding (blinding seems to cause an issue with the limit plotting script...)
         twoD.Limit(
             subtag=signame+'_area',
-            blindData=False,
+            #blindData=False,
             verbosity=0,
             setParams=params_to_set,
             condor=False

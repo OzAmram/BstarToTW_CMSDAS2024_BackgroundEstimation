@@ -46,14 +46,15 @@ If the installation succeeded, you should see no output from the above command.
 ### Finally, clone this repo to the `src` directory as well:
 ```
 cd ~/nobackup/CMSDAS2025/CMSSW_14_1_0_pre4/src/
-git clone --branch fnal-2025 https://github.com/ammitra/BstarToTW_CMSDAS2023_BackgroundEstimation.git
+git clone --branch fnal-2025 https://github.com/ozamram/BstarToTW_CMSDAS2024_BackgroundEstimation.git
 ```
 OR fork the code onto your own personal space and set the upstream:
 ```
-https://github.com/<USERNAME>/BstarToTW_CMSDAS2023_BackgroundEstimation.git
-cd BstarToTW_CMSDAS2023_BackgroundEstimation
-git remote add upstream https://github.com/ammitra/BstarToTW_CMSDAS2023_BackgroundEstimation.git
+https://github.com/<USERNAME>/BstarToTW_CMSDAS2024_BackgroundEstimation.git
+cd BstarToTW_CMSDAS2024_BackgroundEstimation
+git remote add upstream https://github.com/ozamram/BstarToTW_CMSDAS2024_BackgroundEstimation.git
 git remote -v
+git checkout -b fnal-2025
 ```
 
 ## Every time you reconnect to the LPC:
