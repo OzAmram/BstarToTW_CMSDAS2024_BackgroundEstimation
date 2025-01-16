@@ -253,8 +253,9 @@ def perform_limit(signal):
     # can loop over the list values without worrying if the config has changed over time
     # (necessitating remembering that it changed and having to hard-code the list here).
     for signame in twoD.iterWorkspaceObjs['SIGNAME']:
-        # signame is going too look like 16_<what we want> so drop the first three characters
-        print ('Performing limit for %s'%signame)
+        # Replace the dummy signal name with the actual signal mass:
+        signame = signame.replace('SIGMASS',signal)
+        print('Performing limit for %s'%signame)
 
         # Make a subset and card as in ML_fit()
         subset = twoD.ledger.select(_select_signal, signame)
