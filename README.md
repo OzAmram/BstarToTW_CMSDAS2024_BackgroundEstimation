@@ -108,7 +108,7 @@ A plot `impacts.pdf` will be generated in the signal workspace directory.
 ## Calculating the asymptotic limits
 The asymptotic Frequentist limits can be calculated for a given signal by running the following command:
 ```
-python bstar.py -s [mass] --impacts
+python bstar.py -s [mass] --limit
 ```
 
 
