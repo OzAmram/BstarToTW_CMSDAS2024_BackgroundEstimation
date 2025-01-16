@@ -51,7 +51,7 @@ def _select_signal(row, args):
     else:
         return True
 
-def make_workspace():
+def make_workspace(fr):
     '''
     Constructs the workspace for all signals listed in the "SIGNAME" list in the 
     "GLOBAL" object in the json config file. This allows for one complete workspace to be
@@ -64,7 +64,8 @@ def make_workspace():
     # is also saved as runConfig.json. This means, if you want to share your analysis with
     # someone, they can grab everything they need from this one spot - no need to have access to
     # the original files! (Note though that you'd have to change the config to point to organized_hists.root).
-    twoD = TwoDAlphabet(ws_name, 'bstar.json', loadPrevious=False)
+    twoD = TwoDAlphabet('tWfits', 'bstar.json', loadPrevious=False, findreplace=fr)
+
 
     # Create the data - BKGs histograms
     qcd_hists = twoD.InitQCDHists()
@@ -230,6 +231,13 @@ def GoF(signal, tf='', nToys=500, condor=False):
     # If submitting GoF jobs on condor, you must first wait for them to finish before plotting. 
     print('Jobs successfully submitted - you can run plot_GoF after the jobs have finished running to plot results')
 
+def Impacts(signal):
+    '''
+    Calculates the impacts of all nuisane parameters and generates a plot
+    '''
+    twoD = TwoDAlphabet('tWfits', 'bstar.json', loadPrevious=True)
+    twoD.Impacts('tW-{}_area'.format(signal), rMin=-1, rMax=4, extra='')
+
 def perform_limit(signal):
     '''
     Perform a blinded limit. To be blinded, the Combine algorithm (via option `--run blind`)
@@ -249,8 +257,9 @@ def perform_limit(signal):
     # can loop over the list values without worrying if the config has changed over time
     # (necessitating remembering that it changed and having to hard-code the list here).
     for signame in twoD.iterWorkspaceObjs['SIGNAME']:
-        # signame is going too look like 16_<what we want> so drop the first three characters
-        print ('Performing limit for %s'%signame)
+        # Replace the dummy signal name with the actual signal mass:
+        signame = signame.replace('SIGMASS',signal)
+        print('Performing limit for %s'%signame)
 
         # Make a subset and card as in ML_fit()
         subset = twoD.ledger.select(_select_signal, signame)
@@ -266,19 +275,68 @@ def perform_limit(signal):
         )
 
 if __name__ == "__main__":
-    # Generate the 2DAlphabet workspace - this must be run once,
-    # but need not be re-run after initial workspace creation 
-    # unless you have changed something in the JSON config file.
+    from argparse import ArgumentParser
+    parser = ArgumentParser()
+    parser.add_argument('-s', type=str, dest='signal',
+                        action='store', default='2400',
+                        help='Signal mass point to investigate')
+    parser.add_argument('--tf', type=str, dest='tf',
+                        action='store', default='0x0',
+                        help='TF parameterization choice for the SR')
+    parser.add_argument('--make', dest='make',
+                        action='store_true', 
+                        help='If passed as argument, create 2DAlphabet workspace for the given signal')
+    parser.add_argument('--fit', dest='fit',
+                        action='store_true',
+                        help='If passed as arugment, run the ML fit for the given signal. Requires a workspace has been created.')
+    parser.add_argument('--plot', dest='plot',
+                        action='store_true',
+                        help='If passed as arugment, plot the post-ML fit distributions and nuisance pulls. Requires an ML fit has been run.')
+    parser.add_argument('--impacts', dest='impacts',
+                        action='store_true',
+                        help='If passed as arugment, calculate the nuisance parameter impacts. Requires an ML fit has been run.')
+    parser.add_argument('--limit', dest='limit',
+                        action='store_true',
+                        help='If passed as arugment, calculate the asymptotic limits for this signal.')
+    parser.add_argument('--gof', dest='gof',
+                        action='store_true',
+                        help='If passed as arugment, calculate the goodness of fit using the saturated test statistic. Requires that a fit has been run.')
+    
+    args = parser.parse_args()
 
-    make_workspace()
+    if args.make:
+        # Generate the 2DAlphabet workspace - this must be run once,
+        # but need not be re-run after initial workspace creation 
+        # unless you have changed something in the JSON config file.
+        fr = {'signalLHSIGMASS':f'signalLH{args.signal}'}
+        make_workspace(fr=fr)
 
-    # More signal masses can be appended to this list
-    for sig in ['2400']:
+    if args.fit:
+        # Perform the maximum likelihood fit for a given signal mass
+        ML_fit(args.signal)
+    
+    if args.plot:
+        # Plot the postfit results, includinng nuisance pulls and 1D projections
+        plot_fit(args.signal)
 
-        #Different  commands you may want to do 
+    if args.impacts:
+        # Calculate the nuisance parmaeter impacts
+        Impacts(args.signal)
 
-        ML_fit(sig)            # Perform the maximum likelihood fit for a given signal mass
-        plot_fit(sig)          # Plot the postfit results, includinng nuisance pulls and 1D projections
-        #GoF(sig, tf='', nToys=10, condor=False)  # Evaluate the goodness of fit
-        #perform_limit(sig)      # Calculate the limit
+    if args.limit:
+        # Calculate the limit
+        perform_limit(args.signal)
 
+    if args.gof:
+        '''
+        Calculate the goodness of fit for a given fit, using the saturated test statistic
+        params:
+            sig = signal mass
+            tf  = transfer function specifying fit directory. 
+            tf='0x0' -> 'tWfits_0x0'
+            tf=''    -> 'tWfits'
+            nToys = number of toys to generate. More toys gives better test statistic distribution,
+                    but will take longer if not using Condor.
+            condor = whether or not to ship jobs off to Condor. Kinda doesn't work well on LXPLUS
+        '''
+        GoF(sig, tf='', nToys=10, condor=False)

@@ -70,7 +70,49 @@ Then you should be good to go!
 ## Background estimate
 For this exercise we will use the [`2DAlphabet`](https://github.com/ammitra/2DAlphabet) github package. This package uses `.json` configuration files to specify the input histograms (to perform the fit) and the uncertainties. These uncertainties will be used inside of the `Higgs Combine` backend, the fitting package used widely within CMS. The 2DAlphabet package serves as a nice interface with Combine to allow the user to use the 2DAlphabet method without having to create their own custom version of combine. 
 
-# Configuration file
+# Running the exercises 
+
+First create a 2DAlphabet workspace for a given signal mass point. Pass the mass (in GeV) as the argument `--sig` and pass the `--make` flag to make the workspace.
+```
+python bstar.py -s [mass] --make
+```
+From here, there are several Combine methods you can run:
+
+## The maximum likelihood fit
+You can run the maximum likelihood (ML) fit using Combine's [`FitDiagnostics`](https://cms-analysis.github.io/HiggsAnalysis-CombinedLimit/latest/part3/nonstandard/?h=fitdiagn) method. This method runs the background-only and signal-plus-background fits and produces post-fit shape distributions of the backgrounds and signal. 
+```
+python bstar.py -s [mass] --fit
+```
+This requires that a workspace has been generated for the given signal mass point. 
+
+## Plotting the ML fit results
+You can plot the pots-fit distributions and the nuisance parameter pulls using the following command:
+```
+python bstar.py -s [mass] --plot
+```
+
+**Note:** you might see this output displayed on the screen for a minute or so:
+```
+Executing: PostFit2DShapesFromWorkspace -w higgsCombineTest.FitDiagnostics.mH120.root --output postfitshapes_b.root -f fitDiagnosticsTest.root:fit_b --postfit --samples 100 --print > PostFitShapes2D_stderr_b.txt
+Executing: PostFit2DShapesFromWorkspace -w higgsCombineTest.FitDiagnostics.mH120.root --output postfitshapes_s.root -f fitDiagnosticsTest.root:fit_s --postfit --samples 100 --print > PostFitShapes2D_stderr_s.txt
+```
+The code hasn't frozen, it just takes a while for the `PostFit2DShapesFromWorkspace` method to create the post-fit distributions from the B-only and S+B fits. The code isn't frozen!
+
+## Calculating nuisance paramater impacts
+You can calculate the nuisance parameter [impacts](https://cms-analysis.github.io/HiggsAnalysis-CombinedLimit/latest/tutorial2023/parametric_exercise/?h=impact#impacts) on the signal strength by running the following command:
+```
+python bstar.py -s [mass] --impacts
+```
+A plot `impacts.pdf` will be generated in the signal workspace directory.
+
+## Calculating the asymptotic limits
+The asymptotic Frequentist limits can be calculated for a given signal by running the following command:
+```
+python bstar.py -s [mass] --impacts
+```
+
+
+# 2DAlphabet configuration file explained
 
 The configuration file that you will be using is called `bstar.json`, located in this repository. Let's take a look at this file and see the various parts:
 
@@ -79,7 +121,7 @@ The configuration file that you will be using is called `bstar.json`, located in
   - Everything in this section will be used in a file-wide find-and-replace. So wherever you see the name of the sub-objects in this file, it will be expanded by the value assigned to it in this section. 
   - Additionally, the `SIGNAME` list should include the name(s) of all signals you wish to investigate, so that they are added to the workspace when you run the python script.
     - If you wanted to investigate limits for only three signals, for example, you'd just add their names as given in the ROOT files to this list. 
-    - For this exercise, the default is `signalLH2400`, the 2.4 TeV signal sample. You'll want to change this as the exercise progresses
+    - For this exercise, the value is `signalLHSIGMASS`. This is a placeholder, and is overwritten by the `findreplace` argument to the TwoDAlphabet constructor. By passing in the signal mass to the `make_workspace()` function, we overwrite this value with the desired signal mass.
 
 * `REGIONS`
   - This section contains the various regions we are interested in transferring between.
