@@ -10,7 +10,7 @@
 	"HIST_DOWN": "MtwvMt$region$systdown",
 	"pathLPC": "/uscms_data/d3/lcorcodi/BStar13TeV/CMSSW_10_2_0/src/BStar13TeV/rootfiles",
 	"pathLXPLUS": "/eos/user/c/cmsdas/2023/long-ex-b2g/rootfiles",
-	"SIGNAME": ["signalLH2400"]
+	"SIGNAME": ["signalLHSIGMASS"]
     },
     "REGIONS": {
 	"Pass": {
@@ -197,8 +197,8 @@
 	}
     },
     "OPTIONS": {
-	"blindedPlots": [],
-	"blindedFit": [],
+	"blindedPlots": ["Pass"],
+	"blindedFit": ["Pass"],
 	"plotUncerts": false,
 	"plotTitles": false,
 	"year": 2
