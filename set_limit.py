@@ -156,7 +156,7 @@ g_mclimit.SetMarkerSize(0.)
 
 # Observed
 if not options.blind:
-    print 'Not blinded'
+    print('Not blinded')
     print('---------------DEBUG---------------------')
     print('x_mass: {}'.format(x_mass))
     print('len x_mass: {}'.format(len(x_mass)))
@@ -173,7 +173,7 @@ if not options.blind:
     g_limit.SetMinimum(0.3e-3) #0.005
     g_limit.SetMaximum(100.)
 else:
-    print 'Blinded'
+    print('Blinded')
     g_mclimit.GetXaxis().SetTitle("m_{b*_{"+cstr+"}} [TeV]")  # NOT GENERIC
     g_mclimit.GetYaxis().SetTitle("#sigma_{b*_{"+cstr+"}} #times B(b*_{"+cstr+"}#rightarrow tW) (pb)") # NOT GENERIC
     g_mclimit.GetYaxis().SetRangeUser(0., 80.)
@@ -318,10 +318,10 @@ if options.drawIntersection:
     expLineLabel.AddText(str(int(expectedMassLimit))+' TeV')
     expLineLabel.Draw()
 
-print 'Expected limit: '+str(expectedMassLimit) + ' +'+str(upLimit-expectedMassLimit) +' -'+str(expectedMassLimit-lowLimit) + ' TeV' # NOT GENERIC
+print('Expected limit: '+str(expectedMassLimit) + ' +'+str(upLimit-expectedMassLimit) +' -'+str(expectedMassLimit-lowLimit) + ' TeV') # NOT GENERIC
 if not options.blind:
     obsMassLimit,obsCrossLimit = Inter(g_limit,graphWP) if len(Inter(g_limit,graphWP)) > 0 else -1.0
-    print 'Observed limit: '+str(obsMassLimit) + ' TeV'
+    print('Observed limit: '+str(obsMassLimit) + ' TeV')
 
     obsLine = TLine(obsMassLimit,g_mclimit.GetMinimum(),obsMassLimit,obsCrossLimit)
     obsLine.SetLineStyle(2)
