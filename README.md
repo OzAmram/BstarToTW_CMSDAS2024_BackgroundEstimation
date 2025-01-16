@@ -90,6 +90,13 @@ You can plot the pots-fit distributions and the nuisance parameter pulls using t
 python bstar.py -s [mass] --plot
 ```
 
+**Note:** you might see this output displayed on the screen for a minute or so:
+```
+Executing: PostFit2DShapesFromWorkspace -w higgsCombineTest.FitDiagnostics.mH120.root --output postfitshapes_b.root -f fitDiagnosticsTest.root:fit_b --postfit --samples 100 --print > PostFitShapes2D_stderr_b.txt
+Executing: PostFit2DShapesFromWorkspace -w higgsCombineTest.FitDiagnostics.mH120.root --output postfitshapes_s.root -f fitDiagnosticsTest.root:fit_s --postfit --samples 100 --print > PostFitShapes2D_stderr_s.txt
+```
+The code hasn't frozen, it just takes a while for the `PostFit2DShapesFromWorkspace` method to create the post-fit distributions from the B-only and S+B fits. The code isn't frozen!
+
 ## Calculating nuisance paramater impacts
 You can calculate the nuisance parameter [impacts](https://cms-analysis.github.io/HiggsAnalysis-CombinedLimit/latest/tutorial2023/parametric_exercise/?h=impact#impacts) on the signal strength by running the following command:
 ```
