@@ -64,7 +64,7 @@ def make_workspace(fr):
     # is also saved as runConfig.json. This means, if you want to share your analysis with
     # someone, they can grab everything they need from this one spot - no need to have access to
     # the original files! (Note though that you'd have to change the config to point to organized_hists.root).
-    twoD = TwoDAlphabet('tWfits', 'bstar.json', loadPrevious=False, findreplace=fr)
+    twoD = TwoDAlphabet(ws_name, 'bstar.json', loadPrevious=False, findreplace=fr)
 
 
     # Create the data - BKGs histograms
@@ -235,7 +235,7 @@ def Impacts(signal):
     '''
     Calculates the impacts of all nuisane parameters and generates a plot
     '''
-    twoD = TwoDAlphabet('tWfits', 'bstar.json', loadPrevious=True)
+    twoD = TwoDAlphabet(ws_name, 'bstar.json', loadPrevious=True)
     twoD.Impacts('tW-{}_area'.format(signal), rMin=-1, rMax=4, extra='')
 
 def perform_limit(signal):
