@@ -41,8 +41,8 @@ def FTest(poly1, poly2):
     '''
     Perform an F-test to compare the goodness-of-fit between two transfer function parameterizations using existing working areas
     Arguments:
-	poly1 (str): e.g. '0x0', '1x1', ...
-	poly2 (str): e.g. '0x0', '1x1', ...
+    poly1 (str): e.g. '0x0', '1x1', ...
+    poly2 (str): e.g. '0x0', '1x1', ...
     '''
     area1 = 'tWfits_{}'.format(poly1)
     area2 = 'tWfits_{}'.format(poly2)
@@ -87,7 +87,7 @@ def FTest(poly1, poly2):
         fdist.SetParameter(2,ftest_nbins-ftest_p2)
 
         pval = fdist.Integral(0.0,base_fstat[0])
-        print 'P-value: %s'%pval
+        print('P-value: %s'%pval)
 
         c = TCanvas('c','c',800,600)
         c.SetLeftMargin(0.12)
