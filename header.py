@@ -198,7 +198,7 @@ def GetMinWidth(hist):
     return int(use_width)
 
 def smoothHist2D(name,histToSmooth,renormalize=False,iterate=1,skipEdges=False):
-    print "Smoothing "+name
+    print("Smoothing "+name)
     if renormalize: norm = histToSmooth.Integral()
     smoothed_hist = histToSmooth.Clone(name)
     smoothed_hist.Reset()
@@ -357,9 +357,9 @@ def rebinY(thisHist,name,tag,new_y_bins_array):
                 newBinErrorSq = 0
                 nybins = 0
             else:
-                print 'ERROR when doing psuedo-2D y rebin approximation. Slices do not line up on y bin edges'
-                print 'Input bin upper edge = '+str(thisHist.GetYaxis().GetBinUpEdge(ybin))
-                print 'Rebin upper edge = '+str(rebinned.GetYaxis().GetBinUpEdge(rebinHistYBin))
+                print ('ERROR when doing psuedo-2D y rebin approximation. Slices do not line up on y bin edges')
+                print ('Input bin upper edge = '+str(thisHist.GetYaxis().GetBinUpEdge(ybin)))
+                print ('Rebin upper edge = '+str(rebinned.GetYaxis().GetBinUpEdge(rebinHistYBin)))
                 quit()
 
     makeCan(name+'_rebin_compare',tag,[rebinned,thisHist])
@@ -483,13 +483,13 @@ def ftestInfoLookup(projInfoDict):
     return nrpfparams,nbins
 
 def FStatCalc(filename1,filename2,p1,p2,n):
-    print 'Calculating F statistic'
+    print('Calculating F statistic')
     # Flip flop to make sure p2 is always greater than p1 (more parameters should always fit better)
     if p1 > p2:
         p1, p2 = p2, p1
         filename1, filename2 = filename2, filename1
-    print 'Files: ',filename1,filename2
-    print 'Parameters: p1 %f, p2 %f, n %f'%(p1,p2,n)
+    print ('Files: ',filename1,filename2)
+    print ('Parameters: p1 %f, p2 %f, n %f'%(p1,p2,n))
 
     # Get limit trees from each file
     file1 = TFile.Open(filename1)
@@ -612,7 +612,7 @@ def getTwoDAlphaNames(line):
     return proj_names
 
 def executeCmd(cmd,dryrun=False):
-    print 'Executing: '+cmd
+    print('Executing: '+cmd)
     if not dryrun:
         subprocess.call([cmd],shell=True)
 
@@ -662,7 +662,7 @@ def dictToLatexTable(dict2convert,outfilename,roworder=[],columnorder=[]):
 
 def reorderHists(histlist):
     if len(histlist) != 6:
-        print Exception('reorderHists() only built to rearrange list of six hists from 2x3 to 3x2')
+        print (Exception('reorderHists() only built to rearrange list of six hists from 2x3 to 3x2'))
         return histlist
 
     outlist = []
@@ -719,8 +719,8 @@ def makeCan(name, tag, histlist, bkglist=[],totalBkg=None,signals=[],colors=[],
         if titles != []: titles = reorderHists(titles)
         if subtitles != []: subtitles = reorderHists(subtitles)
     else:
-        print 'histlist of size ' + str(len(histlist)) + ' not currently supported'
-        print histlist
+        print ('histlist of size ' + str(len(histlist)) + ' not currently supported')
+        print (histlist)
         return 0
 
     tdrstyle.setTDRStyle()
@@ -1182,16 +1182,16 @@ def Make_up_down(hist):
 
 def checkFitForm(xFitForm,yFitForm):
     if '@0' in xFitForm:
-        print 'ERROR: @0 in XFORM. This is reserved for the variable x. Please either replace it with x or start your parameter naming with @1. Quitting...'
+        print('ERROR: @0 in XFORM. This is reserved for the variable x. Please either replace it with x or start your parameter naming with @1. Quitting...')
         quit()
     if '@0' in yFitForm:
-        print 'ERROR: @0 in YFORM. This is reserved for the variable y. Please either replace it with y or start your parameter naming with @1. Quitting...'
+        print ('ERROR: @0 in YFORM. This is reserved for the variable y. Please either replace it with y or start your parameter naming with @1. Quitting...')
         quit()
     if 'x' in yFitForm and 'exp' not in yFitForm:
-        print 'ERROR: x in YFORM. Did you mean to write "y"? Quitting...'
+        print ('ERROR: x in YFORM. Did you mean to write "y"? Quitting...')
         quit()
     if 'y' in xFitForm:
-        print 'ERROR: y in XFORM. Did you mean to write "x"? Quitting...'
+        print ('ERROR: y in XFORM. Did you mean to write "x"? Quitting...')
         quit()
 
 def RFVform2TF1(RFVform,shift=0): # shift tells function how much to shift the indices of the coefficients by
@@ -1251,7 +1251,7 @@ def Condor(runscript):
     # commands.append("condor_q lcorcodi")
 
     for s in commands:
-        print s
+        print (s)
         subprocess.call([s],shell=True)
 
 def StatsForCondor(run_name,toyDict,tarFilesList,commands,files_to_grab=[]):
@@ -1351,7 +1351,7 @@ def WaitForJobs( listOfJobs ):
         time.sleep(1)
 
 
-    print 'Jobs completed. Checking for errors...'
+    print ('Jobs completed. Checking for errors...')
     numberOfTracebacks = subprocess.check_output('grep -i "Traceback" output*.log | wc -l', shell=True)
     numberOfSyntax = subprocess.check_output('grep -i "Syntax" output*.log | wc -l', shell=True)
 
@@ -1361,13 +1361,13 @@ def WaitForJobs( listOfJobs ):
     # Check there are no syntax or traceback errors
     # Future idea - check output file sizes
     if numberOfTracebacks > 0:
-        print str(numberOfTracebacks) + ' job(s) failed with traceback error'
+        print (str(numberOfTracebacks) + ' job(s) failed with traceback error')
         quit()
     elif numberOfSyntax > 0:
-        print str(numberOfSyntax) + ' job(s) failed with syntax error'
+        print (str(numberOfSyntax) + ' job(s) failed with syntax error')
         quit()
     else:
-        print 'No errors!'
+        print('No errors!')
 
 def Inter(g1,g2):
     xaxisrange = g1.GetXaxis().GetXmax()-g1.GetXaxis().GetXmin()
@@ -1428,7 +1428,7 @@ def separateXandYfromFitString(fitForm):
             outerContent.append(c)
 
     if len(outerContent) != 2:
-        print 'ERROR: Form of the fit did not factorize correctly. Please make sure it is in (x part)(y part) form. Quitting...'
+        print ('ERROR: Form of the fit did not factorize correctly. Please make sure it is in (x part)(y part) form. Quitting...')
         quit()
     else:
         for c in outerContent:
@@ -1437,14 +1437,14 @@ def separateXandYfromFitString(fitForm):
             elif 'x' not in c and 'y' in c:
                 yPart = c
             else:
-                print 'ERROR: Form of the fit did not factorize correctly. Please make sure it is in (x part)(y part) form. Quitting...'
+                print('ERROR: Form of the fit did not factorize correctly. Please make sure it is in (x part)(y part) form. Quitting...')
                 quit()
 
     return xPart,yPart
 
 @contextmanager
 def cd(newdir):
-    print 'cd '+newdir
+    print ('cd '+newdir)
     prevdir = os.getcwd()
     os.chdir(os.path.expanduser(newdir))
     try:
