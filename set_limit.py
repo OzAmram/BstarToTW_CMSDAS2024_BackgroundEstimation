@@ -108,8 +108,8 @@ for this_index, this_name in enumerate(signal_names):
         # Observed (plot only if unblinded)
         if this_tree.quantileExpected == -1: 
             if not options.blind:
-		print('DEBUG : appending to y_limit')
-		print('appending: {} to y_limit'.format(this_tree.limit*this_xsec))
+        print('DEBUG : appending to y_limit')
+        print('appending: {} to y_limit'.format(this_tree.limit*this_xsec))
                 y_limit.append(this_tree.limit*this_xsec)
             else:
                 y_limit.append(0.0)
