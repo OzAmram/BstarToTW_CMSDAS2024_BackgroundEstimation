@@ -47,13 +47,13 @@ If the installation succeeded, you should see no output from the above command.
 ### Finally, clone this repo to the `src` directory as well:
 ```
 cd ..
-git clone --branch fnal-2026 https://github.com/ozamram/BstarToTW_CMSDAS2024_BackgroundEstimation.git
+git clone --branch fnal-2026 git@github.com/ozamram/BstarToTW_CMSDAS2024_BackgroundEstimation.git
 ```
 OR fork the code onto your own personal space and set the upstream:
 ```
 https://github.com/<USERNAME>/BstarToTW_CMSDAS2024_BackgroundEstimation.git
 cd BstarToTW_CMSDAS2024_BackgroundEstimation
-git remote add upstream https://github.com/ozamram/BstarToTW_CMSDAS2024_BackgroundEstimation.git
+git remote add upstream git@github.com/ozamram/BstarToTW_CMSDAS2024_BackgroundEstimation.git
 git remote -v
 git checkout -b fnal-2025
 ```
