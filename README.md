@@ -11,10 +11,11 @@ ssh-add ~/.ssh/id_xyz
 This step is necessary for cloning some of the tools used in the Combine and 2DAlphabet installation.
 
 ### Setup CMSSW and 2DAlphabet environment:
-Assuming you've already created the `~/nobackup/CMSDAS2025/` directory, first create the CMSSW environment. Ensure that you are connecting to an LPC node with AlmaLinux 9, e.g. `cmslpc-el9.fnal.gov`:
+Ensure that you are connecting to an LPC node with AlmaLinux 9, e.g. `cmslpc-el9.fnal.gov`.
+Then naviate to wherever you would like to install the exercise. Note that this should be *outside* of the CMSSW release of the previous exercise.
+Somewhere like `~/nobackup/CMSDAS2026` is a good choice. 
+Then, intialize the CMSSW release we need. (Note that this is a different release version than the TIMBER setup!) 
 ```
-ssh -Y USERNAME@cmslpc-el9.fnal.gov
-cd ~/nobackup/CMSDAS2025/
 cmsrel CMSSW_14_1_0_pre4
 cd CMSSW_14_1_0_pre4/src
 cmsenv
@@ -30,7 +31,7 @@ cd ../../
 git clone --branch CMSWW_14_1_0_pre4 git@github.com:JHU-Tools/CombineHarvester.git
 scramv1 b clean
 scramv1 b -j 16
-git clone --branch el9_matplotlib_plotting git@github.com:JHU-Tools/2DAlphabet.git
+git clone git@github.com:JHU-Tools/2DAlphabet.git
 python3 -m virtualenv twoD-env
 source twoD-env/bin/activate
 cd 2DAlphabet/
@@ -45,8 +46,8 @@ If the installation succeeded, you should see no output from the above command.
 
 ### Finally, clone this repo to the `src` directory as well:
 ```
-cd ~/nobackup/CMSDAS2025/CMSSW_14_1_0_pre4/src/
-git clone --branch fnal-2025 https://github.com/ozamram/BstarToTW_CMSDAS2024_BackgroundEstimation.git
+cd ..
+git clone --branch fnal-2026 https://github.com/ozamram/BstarToTW_CMSDAS2024_BackgroundEstimation.git
 ```
 OR fork the code onto your own personal space and set the upstream:
 ```
