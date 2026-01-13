@@ -52,7 +52,8 @@ r = ROOT.RooParametricHist()
 ### Finally, clone this repo to the `src` directory as well:
 ```
 cd ~/nobackup/CMSDAS2024/CMSSW_10_6_14/src/
-git clone https://github.com/ozamram/BstarToTW_CMSDAS2024_BackgroundEstimation.git
+git clone --branch fnal-2026 git@github.com:OzAmram/BstarToTW_CMSDAS2024_BackgroundEstimation.git
+
 ```
 OR fork the code onto your own personal space and set the upstream:
 ```
