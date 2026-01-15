@@ -1,4 +1,5 @@
 import ROOT
+from ctypes import c_double
 from ROOT import *
 from contextlib import contextmanager
 import os, pickle, subprocess, time,random
@@ -1221,7 +1222,8 @@ def make_smooth_graph(h2,h3):
     npoints = h3.GetN()
     h3.Set(2*npoints+2)
     for b in range(npoints+2):
-        x1, y1 = (ROOT.Double(), ROOT.Double())
+        #x1, y1 = (ROOT.Double(), ROOT.Double())
+        x1, y1 = c_double(), c_double()
         if b == 0:
             h3.GetPoint(npoints-1, x1, y1)
         elif b == 1:
