@@ -510,7 +510,7 @@ def FStatCalc(filename1,filename2,p1,p2,n):
             # if F < 50: 
             diffs.append(F)
         else:
-            print 'WARNING in calculation of F statistic for entry %i. limit1-limit2 <=0 (%f - %f)' %(i,tree1.limit,tree2.limit)
+            print ('WARNING in calculation of F statistic for entry %i. limit1-limit2 <=0 (%f - %f)' %(i,tree1.limit,tree2.limit))
             diffs.append(0)
     # print 'Diffs F stat: ',diffs
     return diffs
